@@ -1,4 +1,6 @@
-# はじめに
+# Haskell setup for AtCoder 202301 Language Update
+
+## はじめに
 
 本稿では，
 [AtCoder Language 2023/1 Language Update](https://docs.google.com/spreadsheets/d/1HXyOXt5bKwhKWXruzUvfMFHQtBxfZQ0047W7VVObnXI) 
@@ -8,7 +10,7 @@ AtCoder 社のスタッフのみなさまにセットアップの内容を説明
 および Haskell に習熟した AtCoder ユーザーのみなさまに手元環境構築のための情報を提供することを
 目的としています．
 
-# 概要
+## 概要
 
 コンパイラ (GHC) とビルドツール (cabal-install) のインストールについては，
 [前回の方法](./legacy-2019-07/spec.md)を踏襲し，[GHCup](https://www.haskell.org/ghcup/)
@@ -33,7 +35,7 @@ cabal-install | 3.8.1.0
 `cabal v2-build` コマンドで行っています．
 
 
-# AtCoder サーバー環境
+## AtCoder サーバー環境
 
 [Language Update スプレッドシート](https://docs.google.com/spreadsheets/d/1HXyOXt5bKwhKWXruzUvfMFHQtBxfZQ0047W7VVObnXI) の記述によれば，今回の環境は次のとおりです．
 
@@ -63,7 +65,7 @@ ATCODER=1
 パッケージへのパス | `./submission` (= `/judge/submission`)
 提出ファイルの配置先 | `./submission/app/Main.hs`
 
-## インストール
+### インストール
 
 次のshell scriptによって，ホームディレクトリ以下に GHC と cabal-install がインストールされ，
 ワーキングディレクトリ以下に 提出受け入れ用 Cabal パッケージ `submission` が作成され，
