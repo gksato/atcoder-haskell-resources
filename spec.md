@@ -38,7 +38,7 @@ cabal-install | 3.8.1.0
 [Language Update スプレッドシート](https://docs.google.com/spreadsheets/d/1HXyOXt5bKwhKWXruzUvfMFHQtBxfZQ0047W7VVObnXI) の記述によれば，今回の環境は次のとおりです．
 
 項目 | 内容
------
+-----|----
 OS | Ubuntu 22.10
 ワーキングディレクトリ | `/judge`
 ユーザー名 | `runner`
@@ -58,7 +58,7 @@ ATCODER=1
 このパッケージに関する情報は次のとおりです：
 
 項目 | 内容
----
+----|----
 パッケージ名 | `submission`
 パッケージへのパス | `./submission` (= `/judge/submission`)
 提出ファイルの配置先 | `./submission/app/Main.hs`
@@ -66,7 +66,8 @@ ATCODER=1
 ## インストール
 
 次のshell scriptによって，ホームディレクトリ以下に GHC と cabal-install がインストールされ，
-ワーキングディレクトリ以下に 提出受け入れ用 Cabal パッケージ `submission` が作成されます．
+ワーキングディレクトリ以下に 提出受け入れ用 Cabal パッケージ `submission` が作成され，
+ライブラリがビルドされます．
 このファイルは，[install.sh](./install.sh) からも参照できます：
 
 ```bash
