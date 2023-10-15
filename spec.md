@@ -4,10 +4,10 @@
 
 本稿では，
 [AtCoder Language 2023/1 Language Update](https://docs.google.com/spreadsheets/d/1HXyOXt5bKwhKWXruzUvfMFHQtBxfZQ0047W7VVObnXI) 
-に提案し採用されたHaskell の実行環境について，そのセットアップ方法，その内容，
+に提案し採用されたHaskellの実行環境について，そのセットアップ方法，その内容，
 および手元での再現方法について述べます．
-AtCoder 社のスタッフのみなさまにセットアップの内容を説明すること，
-および Haskell に習熟した AtCoder ユーザーのみなさまに手元環境構築のための情報を提供することを
+AtCoder社のスタッフのみなさまにセットアップの内容を説明すること，
+およびHaskellに習熟したAtCoderユーザーのみなさまに手元環境構築のための情報を提供することを
 目的としています．
 
 ## 概要
@@ -15,10 +15,10 @@ AtCoder 社のスタッフのみなさまにセットアップの内容を説明
 コンパイラ (GHC) とビルドツール (cabal-install) のインストールについては，
 [前回の方法](./legacy-2019-07/spec.md)を踏襲し，[GHCup](https://www.haskell.org/ghcup/)
 を使った環境構築方法を採用しました．
-GHCupは [rustup](https://rustup.rs/) と同じような環境構築ツールです．
+GHCupは[rustup](https://rustup.rs/)と同じような環境構築ツールです．
 GHCupは，自身のインストールと同時，またはコマンドラインによって要求した時にGHCや
 cabal-install，その他重要なツールを自動的にダウンロード・インストールします．
-本環境構築手順においては，GHCupは以下のバージョンのGHC, cabal-installのみをインストールし，
+本環境構築手順においては，GHCupは以下のバージョンの GHC, cabal-install のみをインストールし，
 その他のツールをインストールせずにスキップします：
 
 ツール | バージョン
@@ -27,17 +27,18 @@ GHC | 9.4.5
 cabal-install | 3.8.1.0
 
 ライブラリのインストールおよび提出ファイルのコンパイルについては，前回の環境から
-変更してあります．前回の環境では，cabal-install を用いて
+変更してあります．前回の環境では，cabal-installを用いて
 環境にライブラリをインストールし，
 ソースコードのコンパイルにはGHCそのものを用いるようにしていました．
-今回の手順では，ローカルな Cabal の package を作成し，ライブラリはその package の dependency
-として登録することで，ライブラリのビルドおよび提出コードのビルドをともに cabal-install の
+今回の手順では，ローカルなCabal packageを作成し，ライブラリはそのpackageのdependency
+として登録することで，ライブラリのビルドおよび提出コードのビルドをともにcabal-installの
 `cabal v2-build` コマンドで行っています．
 
 
-## AtCoder サーバー環境
+## AtCoderサーバー環境
 
-[Language Update スプレッドシート](https://docs.google.com/spreadsheets/d/1HXyOXt5bKwhKWXruzUvfMFHQtBxfZQ0047W7VVObnXI) の記述によれば，今回の環境は次のとおりです．
+[Language Update スプレッドシート](https://docs.google.com/spreadsheets/d/1HXyOXt5bKwhKWXruzUvfMFHQtBxfZQ0047W7VVObnXI)
+の記述によれば，今回の環境は次のとおりです．
 
 項目 | 内容
 -----|----
@@ -45,6 +46,7 @@ OS | Ubuntu 22.10
 ワーキングディレクトリ | `/judge`
 ユーザー名 | `runner`
 
+環境変数は次のとおりです：
 ```
 HOME=/home/runner
 LANG=C.UTF-8
@@ -53,8 +55,7 @@ ATCODER=1
 ```
 
 なお，今回のアップデートにおいてはインストールおよびコンパイルで設定した
-環境変数は持ち越されないため，必要な変更はインストールコマンド，
-コンパイルコマンドでその都度行っています．
+環境変数は持ち越されないため，必要な変更はインストールコマンド，コンパイルコマンドでその都度行っています．
 
 今回のインストールでは，ユーザー提出をCabalパッケージに包んでcabal-installでビルドしますが，
 このパッケージに関する情報は次のとおりです：
@@ -67,17 +68,17 @@ ATCODER=1
 
 ### インストール
 
-次のshell scriptによって，ホームディレクトリ以下に GHC と cabal-install がインストールされ，
-ワーキングディレクトリ以下に 提出受け入れ用 Cabal パッケージ `submission` が作成され，
+次のshell scriptによって，ホームディレクトリ以下にGHCとcabal-installがインストールされ，
+ワーキングディレクトリ以下に 提出受け入れ用Cabalパッケージ `submission` が作成され，
 ライブラリがビルドされます．
 このファイルは，[install.sh](./install.sh) からも参照できます：
 
 ```bash
 #! /bin/bash
 
-# Make sure you log in as the user who will compile and execute this code!
+# Make sure you log in as the user who will compile and execute the submission!
 
-# Install prerequisites
+# Install dependencies of GHC, cabal-install, GHCup
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y curl
@@ -90,7 +91,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_H
 # Set PATH
 source ~/.ghcup/env
 
-# Set dependencies and build options
+# Set Haskell library dependencies and build options
 mkdir -p submission/app
 
 cd submission
@@ -239,3 +240,142 @@ rm app/Main.hs
 rm -rf ~/.ghcup/bin/ghcup ~/.ghcup/cache ~/.ghcup/logs ~/.ghcup/tmp ~/.ghcup/trash ~/.cabal/logs
 
 ```
+
+### コンパイル・実行
+
+コンパイルは，以下の bash スクリプトによって行われます．
+
+```bash
+cd submission
+source ~/.ghcup/env
+cabal v2-build --offline && cp $(cabal list-bin main) ../
+```
+
+このスクリプトは，提出されたソースコードをコンパイルし，実行ファイルを生成します．
+ソースコードは `./submission/app/Main.hs` に配置される必要があります．
+コンパイルが成功した場合，実行ファイルはパス `./main` に存在します．
+実行ファイル `./main` を今回の言語環境におけるObject File
+(コンパイルの成功判定用ファイル) として使うことができます．
+
+実行は，単に実行ファイル `./main` を呼び出すことで行うことができます．
+実行時に設定すべき環境変数は存在しません．
+
+## AtCoderサーバー環境の解説
+
+本節では前節の説明を行います．
+
+### インストール手順(1)：依存APTパッケージのインストール
+
+
+インストール用bash scriptのうち，次に示す冒頭の部分は，Ubuntu上で GHCup, GHC,
+cabal-install が依存するAPTパッケージをインストールするためのものです：
+
+```bash
+# Make sure you log in as the user who will compile and execute the submission!
+
+# Install dependencies of GHC, cabal-install, GHCup
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y curl
+sudo apt-get install -y --no-install-recommends build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5 llvm-14
+```
+
+ここでインストールされるAPTパッケージは3つに大別されます．
+1. GHCupが依存関係として要求するもの (`llvm-14`以外の，`curl` 含めた全て)．
+2. GHCupインストールスクリプトのダウンロードに必要なもの (`curl`)．
+3. LLVMバックエンドを用いたコンパイルに必要なもの (`llvm-14`)．
+このうち，GHCupが依存関係として要求するAPTパッケージは，ターゲット環境上で，
+GHCupを[公式ウェブサイト](https://www.haskell.org/ghcup/)の
+インストール手順をインストールの最終確認の時点まで実行することで確認できるものです：
+
+```bash
+# Official installation method of GHCup for Unix-likes
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+```
+
+最終確認の時点で `Ctrl+C` を押して中止を選択すればインストールは実行されないので，
+実際に GHCup, GHC, cabal-install をインストールすることなく
+必要パッケージを確認できます．
+例えば，本稿執筆時点でUbuntu環境上で上のコマンドを実行して，
+Yes/Noダイアログにいくつか回答すると，次のように表示されます
+（ダイアログは長いので， `several lines omitted` の示す通り，省略しています）：
+
+```shell-session
+$ curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+[... several lines omitted ...]
+System requirements
+  Please ensure the following distro packages are installed before continuing (you can exit ghcup and return at any time): build-essential curl libffi-dev libffi8ubuntu1 libgmp-dev libgmp10 libncurses-dev libncurses5 libtinfo5
+Press ENTER to proceed or ctrl-c to abort.
+Installation may take a while.
+```
+
+これらは，GHCupの依存関係としては `apt-get install --no-install-recommends`
+でインストールすれば十分です．ただし， GHCupインストールスクリプトを
+`https://get-ghcup.haskell.org` からダウンロードする際に，
+`curl --proto '=https' --tlsv1.2 -sSf` オプションを機能させるために
+`curl` の recommended packages が必要なので，そのために追加で
+`sudo apt-get install -y curl` を実行しています（どの recommended packages
+が必要なのかは未調査です）．
+
+
+ここまででGHCupでGHCとcabal-installをインストールするのに必要な環境は揃っていますが，
+今回の環境では，高速なマシンコード生成のために，LLVMを追加でインストールします．
+必要なLLVMのバージョンはGHCのバージョンごとに違っており， GHC User's Guide から確認するのが確実です．
+GHC 9.4.5 の要求は LLVM version >= 10, < 15 であり，これは
+[GHC 9.4.5 User's Guide](https://downloads.haskell.org/ghc/9.4.5/docs/users_guide/) の
+[Release Notes Version 9.4.5 ](https://downloads.haskell.org/ghc/9.4.5/docs/users_guide/9.4.5-notes.html)
+の節や
+[5.10 GHC Backends (Chapter 5 Using GHC)](https://downloads.haskell.org/ghc/9.4.5/docs/users_guide/codegens.html#llvm-code-generator-fllvm)
+の節を見ると確認できます．ですので，
+`sudo apt-get install -y --no-install-recommends llvm-14`
+と可能な最新バージョンをインストールします．
+
+
+### インストール手順(2): GHCup, GHC, cabal-install のインストール
+
+インストールスクリプトの次の部分で GHCup, GHC, cabal-install
+がインストールされます．
+
+```bash
+# Install Haskell
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_GHC_VERSION=9.4.5 BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0 BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1 sh
+```
+
+比較のため，[GHCup公式のインストールコマンド](https://www.haskell.org/ghcup/)
+を再掲します：
+
+```bash
+# Official installation method of GHCup for Unix-likes
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+```
+
+これらのコマンドで `curl` によってダウンロードされ，
+`sh` によって実行される公式インストールスクリプトは
+https://github.com/haskell/ghcup-hs/blob/master/scripts/bootstrap/bootstrap-haskell
+から確認できます．このスクリプトの冒頭でコメントとして記されている通り，
+このスクリプトは環境変数による実行時設定を受け入れます．
+我々のAtCoder用Haskell環境構築スクリプトでは，
+それら環境変数をいくつか付加して実行することで，適切なインストールを行います．
+
+GHCup公式インストールスクリプトの冒頭コメントで確認できますが，
+それぞれの環境変数の効果についてこちらでも述べておくと：
+
+* `BOOTSTRAP_HASKELL_NON_INTERACTIVE=1`: Yes/Noダイアログによるインタラクティブ
+な実行時設定を無効にし，実行時の操作なしでインストールできるようにする．
+* `BOOTSTRAP_HASKELL_GHC_VERSION=9.4.5`: インストールされるべきGHCのバージョン．
+* `BOOTSTRAP_HASKELL_CABAL_VERSION=3.8.1.0`:
+インストールされるべきcabal-installのバージョン．
+* `BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1`: デフォルトでは
+[The Haskell Tool Stack](https://docs.haskellstack.org/en/stable/)
+をインストールするが，本インストールでは不要なのでこれを抑止する．
+
+なお，GHCupインストールスクリプトがインストールしうるソフトウェアとしては
+GHC, cabal-install, the Haskell Tool Stack の他に
+[Haskell Language Server (HLS)](https://haskell-language-server.readthedocs.io/en/latest/)
+がありますが，
+これはYes/Noダイアログか環境変数で明示的に要求しないとインストールされず，
+今回のHaskell言語環境においては不要なので，考える必要はありません．
+
+### インストール手順(3) 提出受け入れ用Cabalパッケージの作成
+
+

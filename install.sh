@@ -1,8 +1,8 @@
 #! /bin/bash
 
-# Make sure you log in as the same user who will compile and execute this code!
+# Make sure you log in as the same user who will compile and execute the submission!
 
-# Install prerequisites
+# Install the dependencies of GHC, cabal-install, GHCup
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y curl
@@ -15,7 +15,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | BOOTSTRAP_H
 # Set PATH
 source ~/.ghcup/env
 
-# Set dependencies and build options
+# Set Haskell library dependencies and build options
 mkdir -p submission/app
 
 cd submission
